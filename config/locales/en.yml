@@ -32,6 +32,9 @@ en:
       column_activity: "Most recent activity"
     current_session: "Current session"
     end_session: "End session"
+  two_factor_not_configured:
+    title: "Second factor not configured"
+    message: "Access from this IP requires two-factor authentication. Sign in from your internal network to configure two-factor authentication for this user."
   two_factor_authenticators:
     title: "Two-factor authentication"
     setup: "Set up two-factor authentication"
@@ -62,7 +65,7 @@ en:
         one: about one year
         other: about %{count} years
       almost_x_years:
-        one: nearly one year 
+        one: nearly one year
         other: nearly %{count} years
       half_a_minute: half minute
       less_than_x_minutes:

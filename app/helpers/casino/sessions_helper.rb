@@ -54,7 +54,11 @@ module CASino::SessionsHelper
   def handle_signed_in(tgt, options = {})
     if tgt.awaiting_two_factor_authentication?
       @ticket_granting_ticket = tgt
-      render 'casino/sessions/validate_otp'
+      if @ticket_granting_ticket.user.active_two_factor_authenticator
+        render 'casino/sessions/validate_otp'
+      else
+        render 'casino/sessions/two_factor_not_configured'
+      end
     else
       if params[:service].present?
         begin
