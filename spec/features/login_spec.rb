@@ -113,4 +113,18 @@ describe 'Login' do
     it { should have_button('Login') }
     it { should have_text('Incorrect username or password') }
   end
+
+  context 'with remember me disabled' do
+    before { CASino.config.ticket_granting_ticket[:lifetime_long_term] = -1 }
+    after { CASino.config.ticket_granting_ticket[:lifetime_long_term] = 864000 }
+    before { visit login_path }
+
+    it { should_not have_field('rememberMe') }
+  end
+
+  context 'with remember me enabled' do
+    before { visit login_path }
+
+    it { should have_field('rememberMe') }
+  end
 end

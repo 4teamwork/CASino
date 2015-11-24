@@ -228,6 +228,17 @@ describe CASino::SessionsController do
             tgt = CASino::TicketGrantingTicket.last
             tgt.long_term.should == true
           end
+
+          context 'with remember me disabled' do
+            before { CASino.config.ticket_granting_ticket[:lifetime_long_term] = -1 }
+            after { CASino.config.ticket_granting_ticket[:lifetime_long_term] = 864000 }
+
+            it 'does not create a long-term ticket-granting ticket' do
+              post :create, request_options
+              tgt = CASino::TicketGrantingTicket.last
+              tgt.long_term.should == false
+            end
+          end
         end
 
         context 'with two-factor authentication enabled' do

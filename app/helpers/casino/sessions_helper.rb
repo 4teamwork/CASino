@@ -50,6 +50,10 @@ module CASino::SessionsHelper
     cookies.delete :tgt
   end
 
+  def remember_me_enabled?
+    CASino.config.ticket_granting_ticket[:lifetime_long_term] != -1
+  end
+
   private
   def handle_signed_in(tgt, options = {})
     if tgt.awaiting_two_factor_authentication?
