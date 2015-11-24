@@ -30,7 +30,7 @@ module CASino::TicketGrantingTicketProcessor
     user = load_or_initialize_user(authentication_result[:authenticator], user_data[:username], user_data[:extra_attributes])
     cleanup_expired_ticket_granting_tickets(user)
     user.ticket_granting_tickets.create!({
-      awaiting_two_factor_authentication: !user.active_two_factor_authenticator.nil?,
+      awaiting_two_factor_authentication: two_factor_authentication_required?(user, user_ip),
       user_agent: user_agent,
       user_ip: user_ip,
       long_term: !!options[:long_term]
@@ -53,5 +53,14 @@ module CASino::TicketGrantingTicketProcessor
 
   def cleanup_expired_ticket_granting_tickets(user)
     CASino::TicketGrantingTicket.cleanup(user)
+  end
+
+  private
+  def two_factor_authentication_required?(user, user_ip)
+    if (whitelist = CASino.config.two_factor_authenticator[:whitelist]).any?
+      !CASino::IPWhitelist.new(whitelist).include?(user_ip)
+    else
+      !user.active_two_factor_authenticator.nil?
+    end
   end
 end

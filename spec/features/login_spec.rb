@@ -5,7 +5,7 @@ describe 'Login' do
 
   subject { page }
 
-  context 'with two-factor authentication enabled' do
+  context 'with two-factor authentication setup' do
     before do
       in_browser(:other) do
         sign_in
@@ -40,15 +40,63 @@ describe 'Login' do
         it { should have_text('The one-time password you entered is not correct') }
         it { should have_button('Continue') }
       end
+
+      context 'access from whitelisted ip' do
+        before do
+          CASino.config.two_factor_authenticator[:whitelist] = ["127.0.0.1"]
+          sign_in
+        end
+        after { CASino.config.two_factor_authenticator[:whitelist] = [] }
+
+        it { should_not have_button('Login') }
+        it { should_not have_button('Continue') }
+        its(:current_path) { should == sessions_path }
+      end
+
+      context 'access outside whitelist' do
+        before do
+          CASino.config.two_factor_authenticator[:whitelist] = ["192.168.2.0/24"]
+          sign_in
+          fill_in :otp, with: @totp.now
+          click_button 'Continue'
+        end
+        after { CASino.config.two_factor_authenticator[:whitelist] = [] }
+
+        it { should_not have_button('Login') }
+        its(:current_path) { should == sessions_path }
+      end
     end
   end
 
-  context 'with two-factor authentication disabled' do
+  context 'without two-factor authentication setup' do
     context 'with valid username and password' do
       before { sign_in }
 
       it { should_not have_button('Login') }
       its(:current_path) { should == sessions_path }
+    end
+
+    context 'access from whitelisted ip' do
+      before do
+        CASino.config.two_factor_authenticator[:whitelist] = ["127.0.0.1"]
+        sign_in
+      end
+      after { CASino.config.two_factor_authenticator[:whitelist] = [] }
+
+      it { should_not have_button('Login') }
+      it { should_not have_button('Continue') }
+      its(:current_path) { should == sessions_path }
+    end
+
+    context 'access outside whitelist' do
+      before do
+        CASino.config.two_factor_authenticator[:whitelist] = ["192.168.2.0/24"]
+        sign_in
+      end
+      after { CASino.config.two_factor_authenticator[:whitelist] = [] }
+
+      it { should have_text('Second factor not configured') }
+      its(:current_path) { should == login_path }
     end
   end
 
