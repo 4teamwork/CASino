@@ -208,6 +208,9 @@ describe CASino::SessionsController do
           post :create, request_options
           tgt = CASino::TicketGrantingTicket.last
           tgt.user_ip.should == '0.0.0.0'
+
+          audit = CASino::LoginAudit.last
+          audit.user_ip.should == '0.0.0.0'
         end
 
         context 'with rememberMe set' do
@@ -290,6 +293,12 @@ describe CASino::SessionsController do
             end.should change(CASino::TicketGrantingTicket, :count).by(1)
           end
 
+          it 'generates a login-audit ticket' do
+            lambda do
+              post :create, request_options
+            end.should change(CASino::LoginAudit, :count).by(1)
+          end
+
           context 'when the user does not exist yet' do
             it 'generates exactly one user' do
               lambda do
@@ -346,6 +355,12 @@ describe CASino::SessionsController do
             lambda do
               post :create, request_options
             end.should change(CASino::TicketGrantingTicket, :count).by(1)
+          end
+
+          it 'generates a login-audit ticket' do
+            lambda do
+              post :create, request_options
+            end.should change(CASino::LoginAudit, :count).by(1)
           end
         end
       end
@@ -588,6 +603,12 @@ describe CASino::SessionsController do
         lambda do
           delete :destroy, request_options
         end.should change(CASino::TicketGrantingTicket, :count).by(-1)
+      end
+
+      it 'does not delete login-audits' do
+        lambda do
+          delete :destroy, request_options
+        end.should_not change(CASino::LoginAudit, :count)
       end
 
       it 'deletes the ticket-granting ticket' do

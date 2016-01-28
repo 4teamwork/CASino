@@ -7,6 +7,7 @@ class CASino::TicketGrantingTicket < ActiveRecord::Base
 
   belongs_to :user
   has_many :service_tickets, dependent: :destroy
+  has_one :login_audit
 
   scope :active, -> { where(awaiting_two_factor_authentication: false).order('updated_at DESC') }
 
@@ -29,12 +30,11 @@ class CASino::TicketGrantingTicket < ActiveRecord::Base
   end
 
   def browser_info
-    unless self.user_agent.blank?
-      user_agent = UserAgent.parse(self.user_agent)
-      if user_agent.platform.nil?
-        "#{user_agent.browser}"
+    if agent
+      if agent.platform.nil?
+        "#{agent.browser}"
       else
-        "#{user_agent.browser} (#{user_agent.platform})"
+        "#{agent.browser} (#{agent.platform})"
       end
     end
   end
@@ -56,5 +56,11 @@ class CASino::TicketGrantingTicket < ActiveRecord::Base
       lifetime = CASino.config.ticket_granting_ticket[:lifetime]
     end
     (Time.now - (self.created_at || Time.now)) > lifetime
+  end
+
+  def agent
+    unless self.user_agent.blank?
+      agent ||= UserAgent.parse(self.user_agent)
+    end
   end
 end

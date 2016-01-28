@@ -29,12 +29,16 @@ module CASino::TicketGrantingTicketProcessor
     user_data = authentication_result[:user_data]
     user = load_or_initialize_user(authentication_result[:authenticator], user_data[:username], user_data[:extra_attributes])
     cleanup_expired_ticket_granting_tickets(user)
-    user.ticket_granting_tickets.create!({
-      awaiting_two_factor_authentication: two_factor_authentication_required?(user, user_ip),
-      user_agent: user_agent,
-      user_ip: user_ip,
-      long_term: !!options[:long_term]
-    })
+    ActiveRecord::Base.transaction do
+      tgt = user.ticket_granting_tickets.create!({
+        awaiting_two_factor_authentication: two_factor_authentication_required?(user, user_ip),
+        user_agent: user_agent,
+        user_ip: user_ip,
+        long_term: !!options[:long_term]
+       })
+      user.login_audits.create!(user_agent: user_agent, user_ip: user_ip, ticket_granting_ticket: tgt)
+      tgt
+    end
   end
 
   def load_or_initialize_user(authenticator, username, extra_attributes)
