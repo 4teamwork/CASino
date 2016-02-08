@@ -6,7 +6,8 @@ class CASino::ServiceTicket < ActiveRecord::Base
   self.ticket_prefix = 'ST'.freeze
 
   belongs_to :ticket_granting_ticket
-  before_destroy :send_single_sign_out_notification, if: :consumed?
+  # NOTE: temporary disabled. We don't use single-sign-out sematics.
+  # before_destroy :send_single_sign_out_notification, if: :consumed?
   has_many :proxy_granting_tickets, as: :granter, dependent: :destroy
 
   def self.cleanup_unconsumed

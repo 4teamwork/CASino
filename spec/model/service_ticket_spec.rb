@@ -99,6 +99,7 @@ describe CASino::ServiceTicket do
 
   describe '#destroy' do
     it 'sends out a single sign out notification' do
+      skip "this feature has been disabled in our fork."
       described_class::SingleSignOutNotifier.any_instance.should_receive(:notify).and_return(true)
       consumed_ticket.destroy
     end
