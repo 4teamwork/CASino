@@ -14,6 +14,9 @@ $logoHeight: 34px !default;
 
 $font: "Source Sans Pro" !default;
 
+$screen-small-width: 600px !default;
+$screen-medium-width: 800px !default;
+
 /// GOOGLE FONT ///
 
 @if $font == "Source Sans Pro" {
@@ -320,56 +323,9 @@ table {
 
 
 /// RESPONSIVE ///
-@media only screen and (max-width: 600px)  {
+@media only screen and (max-width: $screen-small-width)  {
   .container {
     padding-top: 0;
-  }
-
-  .box {
-    width: 100%;
-  }
-
-  .sessions, .logout {
-    .info {
-      margin-top: 40px;
-      width: 100%;
-    }
-
-    .logo {
-      background-position: 0 0;
-      float: none;
-      height: 200px;
-      padding: 0;
-      width: 100%;
-    }
-  }
-
-  .login, .logout {
-    > div {
-      height: auto;
-    }
-  }
-
-  .login {
-    .logo {
-      width: 100%;
-    }
-
-    .form {
-      border-left: none;
-      padding-bottom: 0;
-      width: 100%;
-    }
-  }
-}
-
-
-@media only screen and (max-width: 800px)  {
-  .container {
-    .sessions {
-      margin-top: 10px;
-      width: 100%;
-    }
 
     table, thead, tbody, th, td, tr {
       display: block;
@@ -417,6 +373,53 @@ table {
       top: 6px;
       white-space: nowrap;
       width: 45%;
+    }
+  }
+
+  .box {
+    width: 100%;
+  }
+
+  .sessions, .logout {
+    .info {
+      margin-top: 40px;
+      width: 100%;
+    }
+
+    .logo {
+      background-position: 0 0;
+      float: none;
+      height: 200px;
+      padding: 0;
+      width: 100%;
+    }
+  }
+
+  .login, .logout {
+    > div {
+      height: auto;
+    }
+  }
+
+  .login {
+    .logo {
+      width: 100%;
+    }
+
+    .form {
+      border-left: none;
+      padding-bottom: 0;
+      width: 100%;
+    }
+  }
+}
+
+
+@media only screen and (max-width: $screen-medium-width)  {
+  .container {
+    .sessions {
+      margin-top: 10px;
+      width: 100%;
     }
   }
 }
