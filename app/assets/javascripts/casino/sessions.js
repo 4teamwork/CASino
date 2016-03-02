@@ -1,7 +1,9 @@
 (function(win, doc) {
   var url = win.CASino.url('login'),
       cookie_regex = /(^|;)\s*tgt=/,
-      ready_bound = false;
+      ready_bound = false,
+      timeout_handle;
+
 
   function checkCookieExists() {
     var serviceEl = doc.getElementById('service'),
@@ -13,7 +15,7 @@
       }
       win.location = url;
     } else {
-      setTimeout(checkCookieExists, 1000);
+      timeout_handle = setTimeout(checkCookieExists, 1000);
     }
   }
 
@@ -23,7 +25,11 @@
       return;
     }
     ready_bound = true;
-    if(doc.getElementById('login-form')) {
+    var login_form = doc.getElementById('login-form')
+    if(login_form) {
+      login_form.onsubmit = function() {
+        window.clearTimeout(timeout_handle);
+      };
       checkCookieExists();
     }
   });
