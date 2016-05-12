@@ -35,6 +35,9 @@ de:
   two_factor_not_configured:
     title: "Zweiter Faktor nicht eingerichtet"
     message: "Ein Zugriff von dieser IP-Adresse erfordert Zwei-Faktor-Authentifizierung. Melden Sie sich aus Ihrem internen Netzwerk an um die Zwei-Faktor-Authentifizierung für diesen Benutzer einzurichten."
+  external_access_not_allowed:
+    title: "Externer Zugriff nicht erlaubt"
+    message: "Externer Zugriff ist für Sie nicht aktiviert."
   two_factor_authenticators:
     title: "Zwei-Faktor-Authentifizierung"
     setup: "Zwei-Faktor-Authentifizierung einrichten"

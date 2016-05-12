@@ -44,26 +44,81 @@ describe 'Login' do
       context 'access from whitelisted ip' do
         before do
           CASino.config.two_factor_authenticator[:whitelist] = ["127.0.0.1"]
-          sign_in
         end
         after { CASino.config.two_factor_authenticator[:whitelist] = [] }
 
-        it { should_not have_button('Login') }
-        it { should_not have_button('Continue') }
-        its(:current_path) { should == sessions_path }
+        context do
+          before do
+            sign_in
+          end
+          it { should_not have_button('Login') }
+          it { should_not have_button('Continue') }
+          its(:current_path) { should == sessions_path }
+        end
+
+        context 'user not in allowed_groups' do
+          before do
+            CASino.config.two_factor_authenticator[:allowed_groups] = ["privileged_users"]
+            sign_in
+          end
+          after { CASino.config.two_factor_authenticator[:allowed_groups] = [] }
+
+          it { should_not have_button('Login') }
+          its(:current_path) { should == sessions_path }
+        end
+
+        context 'user in allowed_groups' do
+          before do
+            CASino.config.two_factor_authenticator[:allowed_groups] = ["admins"]
+            sign_in
+          end
+          after { CASino.config.two_factor_authenticator[:allowed_groups] = [] }
+
+          it { should_not have_button('Login') }
+          its(:current_path) { should == sessions_path }
+        end
+
       end
 
       context 'access outside whitelist' do
         before do
           CASino.config.two_factor_authenticator[:whitelist] = ["192.168.2.0/24"]
-          sign_in
-          fill_in :otp, with: @totp.now
-          click_button 'Continue'
         end
         after { CASino.config.two_factor_authenticator[:whitelist] = [] }
 
-        it { should_not have_button('Login') }
-        its(:current_path) { should == sessions_path }
+        context do
+          before do
+            sign_in
+            fill_in :otp, with: @totp.now
+            click_button 'Continue'
+          end
+          it { should_not have_button('Login') }
+          its(:current_path) { should == sessions_path }
+        end
+
+        context 'user not in allowed_groups' do
+          before do
+            CASino.config.two_factor_authenticator[:allowed_groups] = ["privileged_users"]
+            sign_in
+          end
+          after { CASino.config.two_factor_authenticator[:allowed_groups] = [] }
+
+          it { should have_text('External access not allowed') }
+          its(:current_path) { should == login_path }
+        end
+
+        context 'user in allowed_groups' do
+          before do
+            CASino.config.two_factor_authenticator[:allowed_groups] = ["admins"]
+            sign_in
+            fill_in :otp, with: @totp.now
+            click_button 'Continue'
+          end
+          after { CASino.config.two_factor_authenticator[:allowed_groups] = [] }
+
+          it { should_not have_button('Login') }
+          its(:current_path) { should == sessions_path }
+        end
       end
     end
   end
@@ -95,8 +150,36 @@ describe 'Login' do
       end
       after { CASino.config.two_factor_authenticator[:whitelist] = [] }
 
-      it { should have_text('Second factor not configured') }
-      its(:current_path) { should == login_path }
+      context do
+        before do
+          sign_in
+        end
+        it { should have_text('Second factor not configured') }
+        its(:current_path) { should == login_path }
+      end
+
+      context 'user not in allowed_groups' do
+        before do
+          CASino.config.two_factor_authenticator[:allowed_groups] = ["privileded_users"]
+          sign_in
+        end
+        after { CASino.config.two_factor_authenticator[:allowed_groups] = [] }
+
+        it { should have_text('External access not allowed') }
+        its(:current_path) { should == login_path }
+      end
+
+      context 'user in allowed_groups' do
+        before do
+          CASino.config.two_factor_authenticator[:allowed_groups] = ["admins"]
+          sign_in
+        end
+        after { CASino.config.two_factor_authenticator[:allowed_groups] = [] }
+
+        it { should have_text('Second factor not configured') }
+        its(:current_path) { should == login_path }
+      end
+
     end
   end
 

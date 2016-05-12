@@ -35,6 +35,9 @@ en:
   two_factor_not_configured:
     title: "Second factor not configured"
     message: "Access from this IP requires two-factor authentication. Sign in from your internal network to configure two-factor authentication for this user."
+  external_access_not_allowed:
+    title: "External access not allowed"
+    message: "External access has not been activated for this user."
   two_factor_authenticators:
     title: "Two-factor authentication"
     setup: "Set up two-factor authentication"

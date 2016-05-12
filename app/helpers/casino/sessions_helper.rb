@@ -35,6 +35,10 @@ module CASino::SessionsHelper
     tgt = acquire_ticket_granting_ticket(authentication_result, request.user_agent, request.remote_ip, options)
     set_tgt_cookie(tgt)
     handle_signed_in(tgt, options)
+  rescue CASino::AccessPolicy::ExternalLoginNotAllowed
+    render 'casino/sessions/external_access_not_allowed'
+  rescue CASino::AccessPolicy::TwoFactorNotConfigured
+    render 'casino/sessions/two_factor_not_configured'
   end
 
   def set_tgt_cookie(tgt)
@@ -58,11 +62,7 @@ module CASino::SessionsHelper
   def handle_signed_in(tgt, options = {})
     if tgt.awaiting_two_factor_authentication?
       @ticket_granting_ticket = tgt
-      if @ticket_granting_ticket.user.active_two_factor_authenticator
-        render 'casino/sessions/validate_otp'
-      else
-        render 'casino/sessions/two_factor_not_configured'
-      end
+      render 'casino/sessions/validate_otp'
     else
       if params[:service].present?
         begin
