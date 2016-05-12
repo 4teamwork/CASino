@@ -46,6 +46,7 @@ module CASino
     two_factor_authenticator: {
       enforce: false,
       whitelist: [],
+      allowed_groups: [],
       timeout: 180,
       lifetime_inactive: 300,
       drift: 30
