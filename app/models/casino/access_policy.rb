@@ -7,13 +7,13 @@ module CASino::AccessPolicy
     if CASino.config.two_factor_authenticator[:whitelist].empty?
       Basic.new context
     else
-      InternalExternal.new context
+      InternalExternal.new context, CASino.config.two_factor_authenticator
     end
   end
 
   class Context < Struct.new(:user, :user_ip, :user_data)
     def user_groups
-      @user_groups ||= Array(user_data[:extra_attributes]['groups'])
+      @user_groups ||= Array(user_data[:extra_attributes]['groups']).map(&:downcase)
     end
 
     def username
@@ -35,7 +35,7 @@ module CASino::AccessPolicy
     end
   end
 
-  class InternalExternal < Struct.new(:context)
+  class InternalExternal < Struct.new(:context, :config)
     def verify!
       if external_access?
         if !external_access_allowed?
@@ -68,11 +68,11 @@ module CASino::AccessPolicy
     end
 
     def allowed_groups
-      @allowed_groups ||= Array(CASino.config.two_factor_authenticator[:allowed_groups])
+      @allowed_groups ||= Array(config[:allowed_groups]).map(&:downcase)
     end
 
     def whitelist
-      @whitelist ||= CASino::IPWhitelist.new(CASino.config.two_factor_authenticator[:whitelist])
+      @whitelist ||= CASino::IPWhitelist.new(config[:whitelist])
     end
   end
 end
