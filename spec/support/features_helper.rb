@@ -14,7 +14,7 @@ module FeatureHelpers
   end
 
   def enable_two_factor_authentication
-    visit new_two_factor_authenticator_path
+    visit new_topt_two_factor_authenticator_path
     secret = find('p#secret').text.gsub(/^Secret:\s*/, '')
     ROTP::TOTP.new(secret).tap do |totp|
       fill_in 'otp', with: "#{totp.now}"

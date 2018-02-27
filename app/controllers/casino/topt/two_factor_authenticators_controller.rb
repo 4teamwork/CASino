@@ -1,14 +1,18 @@
 require 'rotp'
 
-class CASino::TwoFactorAuthenticatorsController < CASino::ApplicationController
+class CASino::TOPT::TwoFactorAuthenticatorsController < CASino::ApplicationController
   include CASino::SessionsHelper
   include CASino::TwoFactorAuthenticatorsHelper
+  helper CASino::TwoFactorAuthenticatorsHelper
   include CASino::TwoFactorAuthenticatorProcessor
 
   before_action :ensure_signed_in
 
   def new
-    @two_factor_authenticator = current_user.two_factor_authenticators.create! secret: ROTP::Base32.random_base32
+    @two_factor_authenticator = current_user.two_factor_authenticators.create!(
+      secret: ROTP::Base32.random_base32,
+      kind: :topt
+    )
   end
 
   def create
@@ -37,4 +41,10 @@ class CASino::TwoFactorAuthenticatorsController < CASino::ApplicationController
     end
     redirect_to sessions_path
   end
+
+  private
+  def two_factor_type
+    params.fetch(:type, :topt)
+  end
+  helper_method :two_factor_type
 end

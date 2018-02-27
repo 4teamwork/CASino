@@ -2,7 +2,16 @@ CASino::Engine.routes.draw do
   mount CASino::API => '/api'
 
   resources :sessions, only: [:index, :destroy]
-  resources :two_factor_authenticators, only: [:new, :create, :destroy]
+  namespace :topt do
+    resources :two_factor_authenticators, only: [:new, :create, :destroy]
+  end
+  namespace :sms do
+    root to: 'two_factor_authenticators#set_phone_number', as: :set_phone_number
+    resources :two_factor_authenticators, only: [:new, :create, :destroy]
+  end
+  resources :two_factor, only: :destroy do
+    get 'choose', on: :collection
+  end
 
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'

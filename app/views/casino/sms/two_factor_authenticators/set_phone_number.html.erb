@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="twofactor box">
+    <div class="info">
+      <h1>SMS <%= t('two_factor_authenticators.setup') %></h1>
+    </div>
+
+    <div class="form">
+      <%= form_tag(new_sms_two_factor_authenticator_path, method: :get, force_utf8: false) do %>
+        <%= label_tag :phone_number, t('two_factor_authenticators.sms.telephone_number') %>
+        <%= telephone_field_tag :phone_number, nil, autofocus: true, autocomplete: 'off' %>
+        <%= link_to t('two_factor_authenticators.cancel'), choose_two_factor_index_path, :class => 'secondary button' %>
+        <%= submit_tag t('two_factor_authenticators.sms.send'), class: 'button', name: nil %>
+      <% end %>
+
+    </div>
+  </div>
+  <%= render 'footer' %>
+</div>

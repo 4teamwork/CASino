@@ -16,7 +16,7 @@
 
       <h3><%= t('two_factor_authenticators.title') %></h3>
       <% if @two_factor_authenticators.blank? %>
-        <%= t('two_factor_authenticators.disabled') %> - <%= link_to t('two_factor_authenticators.enable'), new_two_factor_authenticator_path %>
+        <%= t('two_factor_authenticators.disabled') %> - <%= link_to t('two_factor_authenticators.enable'), choose_two_factor_index_path %>
       <% else %>
         <%= t('two_factor_authenticators.enabled') %> - <%= button_to t('two_factor_authenticators.disable'), two_factor_authenticator_path(@two_factor_authenticators.first.id), method: :delete %>
       <% end %>

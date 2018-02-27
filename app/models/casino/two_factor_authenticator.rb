@@ -2,6 +2,8 @@
 class CASino::TwoFactorAuthenticator < ActiveRecord::Base
   belongs_to :user
 
+  enum kind: { topt: 0, sms: 1 }
+
   scope :active, -> { where(active: true) }
 
   def self.cleanup
@@ -14,5 +16,16 @@ class CASino::TwoFactorAuthenticator < ActiveRecord::Base
 
   def expired?
     !self.active? && (Time.now - (self.created_at || Time.now)) > self.class.lifetime
+  end
+
+  def notify_user!
+    if sms?
+      sms_service.deliver(self)
+    end
+  end
+
+  private
+  def sms_service
+    Rails.application.config.x.sms_service
   end
 end

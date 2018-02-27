@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160127143933) do
+ActiveRecord::Schema.define(version: 20180227102510) do
 
   create_table "casino_auth_token_tickets", force: :cascade do |t|
     t.string   "ticket",     null: false
@@ -102,15 +102,8 @@ ActiveRecord::Schema.define(version: 20160127143933) do
 
   add_index "casino_ticket_granting_tickets", ["ticket"], name: "index_casino_ticket_granting_tickets_on_ticket", unique: true
 
-  create_table "casino_two_factor_authenticators", force: :cascade do |t|
-    t.integer  "user_id",                    null: false
-    t.string   "secret",                     null: false
-    t.boolean  "active",     default: false, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "casino_two_factor_authenticators", ["user_id"], name: "index_casino_two_factor_authenticators_on_user_id"
+# Could not dump table "casino_two_factor_authenticators" because of following NoMethodError
+#   undefined method `[]' for nil:NilClass
 
   create_table "casino_users", force: :cascade do |t|
     t.string   "authenticator",    null: false

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CASino::TwoFactorAuthenticatorsController do
+describe CASino::TOPT::TwoFactorAuthenticatorsController do
   include CASino::Engine.routes.url_helpers
   let(:params) { { } }
   let(:request_options) { params.merge(use_route: :casino) }

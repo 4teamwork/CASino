@@ -22,11 +22,11 @@
     </div>
 
     <div class="form">
-      <%= form_tag(two_factor_authenticators_path, method: :post, id: 'two_factor_authenticators-form') do %>
+      <%= form_tag(topt_two_factor_authenticators_path, method: :post, id: 'two_factor_authenticators-form') do %>
         <%= hidden_field_tag :id, @two_factor_authenticator.id %>
         <%= label_tag :code, t('two_factor_authenticators.code') %>
         <%= text_field_tag :otp, nil, maxlength: 6, autofocus: true, autocomplete: 'off' %>
-        <%= link_to t('two_factor_authenticators.cancel'), sessions_path, :class => 'secondary button' %>
+        <%= link_to t('two_factor_authenticators.cancel'), choose_two_factor_index_path, :class => 'secondary button' %>
         <%= button_tag t('two_factor_authenticators.submit'), :class => 'button' %>
       <% end %>
     </div>

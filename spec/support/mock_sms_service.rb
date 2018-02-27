@@ -1,0 +1,3 @@
+class CASino::MockSMSService
+
+end

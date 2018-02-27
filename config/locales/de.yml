@@ -39,6 +39,9 @@ de:
     title: "Externer Zugriff nicht erlaubt"
     message: "Externer Zugriff ist für Sie nicht aktiviert."
   two_factor_authenticators:
+    choose_type:
+      title: "Mögliche Zwei-Faktor-Authentisierer"
+      back: "Zurück"
     title: "Zwei-Faktor-Authentifizierung"
     setup: "Zwei-Faktor-Authentifizierung einrichten"
     description: "Zwei-Faktor-Authentifizierung fordert Sie beim Login zur Eingabe eines Einmalkennworts auf. Ein Einmalkennwort kann mit Applikationen wie dem <a href='http://support.google.com/accounts/bin/answer.py?hl=de&answer=1066447'>Google Authenticator</a> auf Ihrem Smartphone erstellt werden."
@@ -55,6 +58,25 @@ de:
     invalid_two_factor_authenticator: "Der Zwei-Faktor-Authentifizierer ist abgelaufen. Bitte folgen Sie den untenstehenden Schritten."
     successfully_activated: "Der Zwei-Faktor-Authentifizierer ist jetzt mit Ihrem Account verknüpft."
     successfully_deleted: "Der Zwei-Faktor-Authentifizierer wurde erfolgreich gelöscht."
+    sms:
+      telephone_number: "Telefon Nummer"
+      send: "SMS versenden"
+      title: "SMS Zwei-Faktor-Authentifizierung"
+      setup: "SMS Zwei-Faktor-Authentifizierung einrichten"
+      description: "SMS Zwei-Faktor-Authentifizierung fordert Sie beim Login zur Eingabe eines Codes auf. Sie erhalten diesen Code per SMS."
+      instructions: ""
+      disabled: "Derzeit deaktiviert"
+      enable: "Aktivieren"
+      enabled: "Derzeit aktiviert"
+      disable: "Deaktivieren"
+      cancel: "Abbrechen"
+      secret: "Secret"
+      code: "Bestätigungs-Code"
+      submit: "Verifizieren und aktivieren"
+      invalid_one_time_password: "Das eingegebene Einmalkennwort ist ungültig."
+      invalid_two_factor_authenticator: "Der Zwei-Faktor-Authentifizierer ist abgelaufen. Bitte folgen Sie den untenstehenden Schritten."
+      successfully_activated: "Der Zwei-Faktor-Authentifizierer ist jetzt mit Ihrem Account verknüpft."
+      successfully_deleted: "Der Zwei-Faktor-Authentifizierer wurde erfolgreich gelöscht."
   datetime:
     ago: "%{datetime} her"
     distance_in_words:
